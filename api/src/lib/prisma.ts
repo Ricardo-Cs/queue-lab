@@ -5,9 +5,8 @@ import { Pool } from 'pg';
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 const adapter = new PrismaPg(pool);
 
-const globalForPrisma = globalThis as unknown as { prisma: PrismaClient };
+export const prisma = new PrismaClient({ adapter });
 
-export const prisma =
-    globalForPrisma.prisma ?? new PrismaClient({ adapter });
-
-if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
+export const verifyDatabaseConnection = async (): Promise<void> => {
+    await prisma.$queryRaw`SELECT 1`;
+};

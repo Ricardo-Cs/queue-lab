@@ -9,6 +9,11 @@ services:
       - "${POSTGRES_PORT:-5432}:5432"
     volumes:
       - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   redis:
     image: redis:7-alpine
@@ -22,17 +27,21 @@ services:
     build:
       context: ./api
       dockerfile: Dockerfile
-
     container_name: queue-lab-api
-
     ports:
       - "3000:3000"
-
-    # Adicionar environments aqui depois
-
+    env_file:
+      - .env
+    develop:
+      watch:
+        - action: sync
+          path: ./api/src
+          target: /app/src
     depends_on:
-      - postgres
-      - redis
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
 
 volumes:
   postgres-data:
