@@ -3,9 +3,9 @@
     "rootDir": "./src",
     "outDir": "./dist",
 
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
-    "target": "ES2022",
+    "target": "esnext",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
 
     "lib": ["ES2022"],
     "types": ["node"],

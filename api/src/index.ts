@@ -17,6 +17,11 @@ app.get('/health', (req, res) => {
     res.json({ status: 'ok' });
 });
 
+app.use((req, res) => {
+    res.status(404).json({ error: 'Rota não encontrada' });
+});
+
+
 const start = async () => {
     try {
         await verifyDatabaseConnection();

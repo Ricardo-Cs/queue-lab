@@ -43,6 +43,26 @@ services:
       redis:
         condition: service_started
 
+  worker:
+    build:
+      context: ./worker
+      dockerfile: Dockerfile
+    container_name: queue-lab-worker
+    ports:
+      - "3001:3001"
+    env_file:
+      - .env
+    develop:
+      watch:
+        - action: sync
+          path: ./worker/src
+          target: /worker/src
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+
 volumes:
   postgres-data:
   redis-data:
