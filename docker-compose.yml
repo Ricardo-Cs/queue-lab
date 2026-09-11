@@ -56,7 +56,7 @@ services:
       watch:
         - action: sync
           path: ./worker/src
-          target: /worker/src
+          target: /app/src
     depends_on:
       postgres:
         condition: service_healthy
